@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Web App</title>
+    
+    <!-- Firebase configuration -->
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
+      };
+      
+      // Initialize Firebase
+      const app = firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
 </head>
 <body>
     <h2>Submit your details</h2>
@@ -27,12 +45,17 @@
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const phone = document.getElementById('phone').value;
-            
-            // Simple alert to show submission
-            alert(`Submitted: Name - ${name}, Email - ${email}, Phone - ${phone}`);
 
-            // Normally, this is where you'd send data to the backend.
-            // For simplicity, we're not using a real backend yet.
+            // Add data to Firestore
+            db.collection("submissions").add({
+                name: name,
+                email: email,
+                phone: phone
+            }).then(() => {
+                alert('Data submitted successfully!');
+            }).catch((error) => {
+                console.error("Error writing document: ", error);
+            });
         });
     </script>
 </body>
